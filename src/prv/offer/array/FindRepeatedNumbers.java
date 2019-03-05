@@ -1,45 +1,63 @@
-/**
- * 找出数组中重复的数字
- */
 package prv.offer.array;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
+ * 找出数组中重复的数字
  * @author HJH
- *
- * @date 2018年11月16日
+ * @date 2019年3月3日
  */
 public class FindRepeatedNumbers {
 	
-	public static HashSet<Integer> findRepeatedNum(int nums[]) {
-		if (nums.length <= 0) {
+	public ArrayList<Integer> findRepeatedNum(int[] nums) {
+		if (nums.length == 0) {
 			return null;
 		}
-		for (int i = 0; i < nums.length; i++) {
-			if (nums[i] > nums.length-1 || nums[i] < 0) {
-				return null;
-			}
-		}
-		HashSet<Integer> result = new HashSet<Integer>();
-		for (int i = 0; i < nums.length;) {
+		ArrayList<Integer> rs = new ArrayList<>();
+		mergeSort(nums, 0, nums.length-1);
+		int temp = nums[0], i = 1;
+		while(i < nums.length) {
 			int j = nums[i];
-			if (i != j) {
-				// 交换下标i，j的数字
-				int temp = nums[i];
-				nums[i] = nums[j];
-				nums[j] = temp;
-				// 交换后还和原来位置的值一样，说明重复了，加入结果集，下标加一
-				if (nums[i] == j) {
-					result.add(j);
-					i++;
-				}
+			if (temp == j) {
+				rs.add(j);
+				while(nums[++i] == temp);
 			} else {
-				// 如果下标和对应下标的值一样说明该数字位置正确，下标加一
-				i++;
+				temp = j;
+				i ++;
 			}
 		}
-		return result;
+		return rs;
+	}
+	
+	public void mergeSort(int[] nums, int s, int e) {
+		if (s >= e) {
+			return;
+		}
+		int m = (s + e) >> 1;
+		mergeSort(nums, s, m);
+		mergeSort(nums, m+1, e);
+		merge(nums, s, e, m);
+	}
+	
+	public void merge(int[] nums, int s, int e, int m) {
+		int k = 0, p1 = s, p2 = m + 1;
+		int[] help = new int[e-s+1];
+		while(p1 <= m && p2 <= e) {
+			if (nums[p1] <= nums[p2]) {
+				help[k++] = nums[p1++];
+			} else {
+				help[k++] = nums[p2++];
+			}
+		}
+		while(p1 <= m) {
+			help[k++] = nums[p1++];
+		}
+		while(p2 <= e) {
+			help[k++] = nums[p2++];
+		}
+		for (int i=0;i<help.length;i++) {
+			nums[i+s] = help[i];
+		}
 	}
 	
 }

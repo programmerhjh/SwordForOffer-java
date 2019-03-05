@@ -1,6 +1,3 @@
-/**
- * 
- */
 package prv.offer.array;
 
 /**
@@ -12,7 +9,7 @@ package prv.offer.array;
 
 public class TwoDimensionalArraySearch {
 
-	public static boolean Find(int target, int [][] array) {
+	public boolean Find(int target, int [][] array) {
         if (array.length == 0 || array[0].length == 0) {
 			return false;
 		}
